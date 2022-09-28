@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="text-white h-screen flex justify-center items-center">
+    <form class="w-full  mx-auto bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 p-4">
+        <h1 class="text-xl font-bold text-gray-900 md:text-2xl flex flex-col justify-center items-center pb-3">
+            Registrarse
+        </h1>
+        <div class="flex flex-wrap -mx-3 mb-0">
+          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label class="text-base font-medium text-gray-800" for="name">
+              Nombre
+            </label>
+            <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border-lg rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-800" id="name" type="text" placeholder="Nombre">
+          </div>
+          <div class="w-full md:w-1/2 px-3">
+            <label class="text-base font-medium text-gray-800" for="lastName">
+              Apellido
+            </label>
+            <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="lastName" type="text" placeholder="Apellido">
+          </div>
+        </div>
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label class="text-base font-medium text-gray-800" for="name">
+                DNI
+              </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="dni" type="text" placeholder="DNI">
+            </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label class="text-base font-medium text-gray-800" for="phoneNumber">
+                Teléfono
+              </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="phoneNumber" type="number" placeholder="Teléfono">
+            </div>
+          </div>
+        <div class="flex flex-wrap -mx-3">
+          <div class="w-full px-3">
+            <label class="text-base font-medium text-gray-800" for="email">
+                Email
+            </label>
+            <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="email" type="email" placeholder="Email">
+          </div>
+        </div>
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full px-3">
+              <label class="text-base font-medium text-gray-800" for="userName">
+                Usuario
+            </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="userName" type="text" placeholder="Usuario">
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label class="text-base font-medium text-gray-800" for="password">
+                Contraseña
+              </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="password" type="password" placeholder="*********">
+            </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label class="text-base font-medium text-gray-800" for="repeatPassword">
+                Repetir contraseña
+              </label>
+              <input class="appearance-none block w-full bg-gray-200 text-gray-800 focus:text-white border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="repeatPassword" type="password" placeholder="*********">
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="w-full text-white bg-gray-800 hover:bg-primary-700 font-medium rounded-lg text-sm px-5 py-3 text-center">Registrarse</button>
+        </div>
+      </form>
+</body>
+</html>
