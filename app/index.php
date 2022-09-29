@@ -1,9 +1,8 @@
+
 <?php
-
-  readfile('placard.html');
-
-//   echo '<h1>Esta es la entrega!<h1>';
-//   // phpinfo();
+include("armario.php");
+    // echo '<h1>Esta es la entrega!<h1>';
+  // phpinfo();
 //   $hostname = "db";
 //   $username = "admin";
 //   $password = "test";
@@ -14,19 +13,16 @@
 //     die("Database connection failed: " . $conn->connect_error);
 //   }
 
-
-
-// $query = mysqli_query($conn, "SELECT * FROM usuarios")
+// $query = mysqli_query($conn, "SELECT * FROM users")
 //    or die (mysqli_error($conn));
 
 // while ($row = mysqli_fetch_array($query)) {
 //   echo
 //    "<tr>
 //     <td>{$row['id']}</td>
-//     <td>{$row['nombre']}</td>
+//     <td>{$row['full_name']}</td>
 //    </tr>";
-   
+  
 
 // }
-
 ?>
