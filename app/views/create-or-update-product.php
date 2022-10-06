@@ -21,6 +21,7 @@ if($id) {
 
     // $conn -> close();
 }
+$user['name'] = 'Juan Perez';
 
 ?>
 
@@ -39,7 +40,10 @@ if($id) {
       <div class="text-5xl font-bold"><?php if($product) echo "Editar {$product['name']}"; else echo "Nueva Prenda"; ?></div>
       <div class="text-gray-400"><?php if($product) echo "Editar tu y guarda los cambios en tu armario"; else echo "Agrega una nueva prenda a tu armario"; ?></div>
     </div>
-    <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+    <div class="flex items-center space-x-4">
+        <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['name']}"?></div>
+        <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+    </div>
   </div>
 <div class="bg-gray-900 min-h-screen p-8">
     <form action="" class="w-1/2">
@@ -113,5 +117,8 @@ if($id) {
     window.alert('El producto '+ $product +' se ha agregado correctamente')
     document.location = '/views/armario.php'
     }
+  }
+  function editUser() {
+    console.log('Editar datos del usuario registrado');
   }
 </script>

@@ -8,6 +8,9 @@ $conn = mysqli_connect($hostname,$username,$password,$db);
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
+
+$user['name'] = 'Juan Perez';
+$user['id'] = 1;
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,22 +23,25 @@ if ($conn->connect_error) {
 <body class="text-white">
   <div class="bg-gray-800 p-8 flex items-start justify-between">
     <div>
-        <div class="text-5xl font-bold">Tu armario</div>
-        <div class="text-gray-400">Toda tus prendas en un mismo sitio</div>
+        <div class="text-5xl font-bold">Hola <?php echo"{$user['name']}"?>!</div>
+        <div class="text-gray-400">Aquí esta tu armario. Todas tus prendas en un mismo sitio</div>
     </div>
-    <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+    <div class="flex items-center space-x-4">
+        <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['name']}"?></div>
+        <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+    </div>
 
   </div>
 <div class="bg-gray-900 min-h-screen p-8">
     <?php
-    $query = mysqli_query($conn, "SELECT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = 1")
+    $query = mysqli_query($conn, "SELECT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = {$user['id']}")
     or die (mysqli_error($conn));
     while ($row = mysqli_fetch_array($query)) {
             echo"
                 <div class='text-2xl mb-4'>{$row['category_name']}</div>
                 <div class='flex flex-wrap mb-4'>
             ";
-             $newQuery = mysqli_query($conn, "SELECT * FROM products WHERE user_id = 1 AND category_id = {$row['category_id']}")
+             $newQuery = mysqli_query($conn, "SELECT * FROM products WHERE user_id = {$user['id']} AND category_id = {$row['category_id']}")
                 or die (mysqli_error($conn));
                 while ($row = mysqli_fetch_array($newQuery)) {
                         echo
@@ -80,5 +86,8 @@ function createProduct() {
 }
 function logout() {
     console.log('logout');
+}
+function editUser() {
+    console.log('Editar datos del usuario registrado');
 }
 </script>
