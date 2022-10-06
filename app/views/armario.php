@@ -9,8 +9,10 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-$user['name'] = 'Juan Perez';
-$user['id'] = 1;
+// DEBERIA SER EL AUTH USER
+$sql = "SELECT * FROM users WHERE id = 1";
+$result = $conn -> query($sql);
+$user = $result -> fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,11 +25,11 @@ $user['id'] = 1;
 <body class="text-white">
   <div class="bg-gray-800 p-8 flex items-start justify-between">
     <div>
-        <div class="text-5xl font-bold">Hola <?php echo"{$user['name']}"?>!</div>
+        <div class="text-5xl font-bold">Hola <?php echo"{$user['full_name']}"?>!</div>
         <div class="text-gray-400">Aquí esta tu armario. Todas tus prendas en un mismo sitio</div>
     </div>
     <div class="flex items-center space-x-4">
-        <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['name']}"?></div>
+        <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['full_name']}"?></div>
         <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
     </div>
 
@@ -88,6 +90,6 @@ function logout() {
     console.log('logout');
 }
 function editUser() {
-    console.log('Editar datos del usuario registrado');
+    document.location = '/views/create-or-update-user.php'
 }
 </script>
