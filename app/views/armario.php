@@ -1,18 +1,11 @@
 <?php 
-$hostname = "db";
-$username = "admin";
-$password = "test";
-$db = "database";
+include '../index.php';
+$user_id = $_SESSION['user'];
 
-$conn = mysqli_connect($hostname,$username,$password,$db);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
-
-// DEBERIA SER EL AUTH USER
-$sql = "SELECT * FROM users WHERE id = 1";
+$sql = "SELECT * FROM users WHERE id = $user_id";
 $result = $conn -> query($sql);
 $user = $result -> fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,12 +18,12 @@ $user = $result -> fetch_assoc();
 <body class="text-white">
   <div class="bg-gray-800 p-8 flex items-start justify-between">
     <div>
-        <div class="text-5xl font-bold">Hola <?php echo"{$user['full_name']}"?>!</div>
+        <div class="text-5xl font-bold">Bienvenid@!</div>
         <div class="text-gray-400">Aquí esta tu armario. Todas tus prendas en un mismo sitio</div>
     </div>
     <div class="flex items-center space-x-4">
         <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['full_name']}"?></div>
-        <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
     </div>
 
   </div>

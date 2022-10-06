@@ -1,18 +1,35 @@
 <?php 
-$hostname = "db";
-$username = "admin";
-$password = "test";
-$db = "database";
+include '../index.php';
 
-$conn = mysqli_connect($hostname,$username,$password,$db);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+if(isset($_SESSION['user'])) {
+  $user_id = $_SESSION['user'];
+  $sql = "SELECT * FROM users WHERE id = $user_id";
+  $result = $conn -> query($sql);
+  $user = $result -> fetch_assoc();
 }
 
-// DEBERIA SER EL AUTH USER
-$sql = "SELECT * FROM users WHERE id = 1";
-$result = $conn -> query($sql);
-$user = $result -> fetch_assoc();
+if(isset($_POST['submit']))
+{    
+     $full_name = $_POST['full_name'];
+     $user_name = $_POST['user_name'];
+     $email = $_POST['email'];
+     $phone = $_POST['phone'];
+     $birth_date = $_POST['birth_date'];
+     $password = $_POST['password'];
+     $dni = $_POST['dni'];
+     $sql = "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) 
+     VALUES ('$full_name', '$dni', '$birth_date', $phone, '$email', '$password', '$user_name')";
+     if (mysqli_query($conn, $sql)) {
+        // se podria tirar una alerta o algo
+        require __DIR__ . '/views/login.php';
+     } else {
+        // Mostrar error en pantalla
+        // echo "Error: " . $sql . ":-" . mysqli_error($conn);
+     }
+     mysqli_close($conn);
+}
+
+
 ?>
 <!doctype html>
 <html>
@@ -29,18 +46,18 @@ $user = $result -> fetch_assoc();
     </div>
     <?php if($user) echo "
         <div class='flex items-center space-x-4'>
-            <div class='cursor-pointer'>{$user['full_name']}</div>
-            <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+          <div class='cursor-pointer'>{$user['full_name']}</div>
+          <a href='/views/logout.php' class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
         </div>
     "; ?>
   </div>
   <div class="bg-gray-900 min-h-screen p-10 ">
-    <form name="form" class="w-3/4">
+    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" name="form" class="w-3/4">
       <label class="block text-gray-400 mb-2" for="full_name">
         Nombre y Apellido
       </label>
       <div class="mb-3">
-        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="full_name" type="text" placeholder="Nombre" value="<?php if($user) echo "{$user['full_name']}";?>" >
+        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="full_name" name="full_name" type="text" placeholder="Nombre" value="<?php if($user) echo "{$user['full_name']}";?>" >
         <p id="full_name_error" class="hidden text-rose-600 text-xs">Los caracteres deben ser alfabéticos</p>
       </div>
 
@@ -48,7 +65,7 @@ $user = $result -> fetch_assoc();
         Fecha de Nacimiento
       </label>
       <div class="mb-3">
-        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="birth_date" type="date" value="<?php if($user) echo "{$user['birth_date']}";?>" >
+        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="birth_date" name="birth_date" type="date" value="<?php if($user) echo "{$user['birth_date']}";?>" >
         <p id="birth_date_error" class="hidden text-rose-600 text-xs">La fecha de nacimiento no puede ser mayor a la fecha actual</p>
       </div>
 
@@ -58,14 +75,14 @@ $user = $result -> fetch_assoc();
           <label class="block text-gray-400 mb-2" for="name">
             DNI
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="dni" type="text" placeholder="DNI" value="<?php if($user) echo "{$user['dni']}";?>" >
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="dni" name="dni" type="text" placeholder="DNI" value="<?php if($user) echo "{$user['dni']}";?>" >
           <p id="dni_error" class="hidden text-rose-600 text-xs">El formato debe ser del tipo 11111111-Z y la letra debe verificar los números</p>
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="phoneNumber">
             Teléfono
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="text" placeholder="Teléfono" value="<?php if($user) echo "{$user['phone']}";?>" >
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="phone" name="phone" type="text" placeholder="Teléfono" value="<?php if($user) echo "{$user['phone']}";?>" >
           <p id="phone_error" class="hidden text-rose-600 text-xs">El teléfono debe tener 9 digitos</p>
         </div>
       </div>
@@ -75,7 +92,7 @@ $user = $result -> fetch_assoc();
               Email
           </label>
           <div class="mb-3">
-            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="Email" value="<?php if($user) echo "{$user['email']}";?>" >
+            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Email" value="<?php if($user) echo "{$user['email']}";?>" >
             <p id="email_error" class="hidden text-rose-600 text-xs">El formato de email debe ser del tipo example@test.com</p>
           </div>
         </div>
@@ -86,7 +103,7 @@ $user = $result -> fetch_assoc();
             Nombre de Usuario
           </label>
           <div class="mb-3">
-            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="user_name" type="text" placeholder="Usuario" value="<?php if($user) echo "{$user['user_name']}";?>" >
+            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="user_name" name="user_name" type="text" placeholder="Usuario" value="<?php if($user) echo "{$user['user_name']}";?>" >
             <p id="user_name_error" class="hidden text-rose-600 text-xs">Debe ingresar un nombre de usuario</p>
           </div>
         </div>
@@ -96,7 +113,7 @@ $user = $result -> fetch_assoc();
           <label class="block text-gray-400 mb-2" for="password">
             Contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" value="<?php if($user) echo "{$user['password']}";?>" >
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" value="<?php if($user) echo "{$user['password']}";?>" >
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="confirm_password">
@@ -107,7 +124,7 @@ $user = $result -> fetch_assoc();
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
       <div>
-        <input type="button" value="<?php if($user) echo "Guardar"; else echo "registrarse"; ?>" onclick="register()" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
+        <input type="submit" name="submit" value="<?php if($user) echo "Guardar"; else echo "registrarse"; ?>" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
       </div>
     </form>
     </div>
