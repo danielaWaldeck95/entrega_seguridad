@@ -1,3 +1,6 @@
 <?php
-// ESTO HAY QUE CAMBIARLO
-require __DIR__ . '/views/armario.php';
+include 'config.php';
+session_start();
+if(!isset($_SESSION['user'])){ //if login in session is not set
+    header("Location: /views/login.php");
+}

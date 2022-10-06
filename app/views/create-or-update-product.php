@@ -1,32 +1,15 @@
-<?php 
-$hostname = "db";
-$username = "admin";
-$password = "test";
-$db = "database";
+<?php
+include '../index.php';
 
-$conn = mysqli_connect($hostname,$username,$password,$db);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
-
+$user = $_SESSION['user'];
 $id = $_GET["id"];
 
 if($id) {
     $sql = "SELECT * FROM products WHERE id = $id";
     $result = $conn -> query($sql);
-
-    $product = $result -> fetch_assoc();
-    
+    $product = $result -> fetch_assoc();  
     $result -> free_result();
-
-    // $conn -> close();
 }
-
-// DEBERIA SER EL AUTH USER
-$sql = "SELECT * FROM users WHERE id = 1";
-$result = $conn -> query($sql);
-$user = $result -> fetch_assoc();
-$result -> free_result();
 
 ?>
 
