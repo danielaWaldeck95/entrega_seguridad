@@ -1,10 +1,5 @@
 <?php 
 include '../index.php';
-$user_id = $_SESSION['user'];
-
-$sql = "SELECT * FROM users WHERE id = $user_id";
-$result = $conn -> query($sql);
-$user = $result -> fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -29,7 +24,7 @@ $user = $result -> fetch_assoc();
   </div>
 <div class="bg-gray-900 min-h-screen p-8">
     <?php
-    $query = mysqli_query($conn, "SELECT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = {$user['id']}")
+    $query = mysqli_query($conn, "SELECT DISTINCT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = {$user['id']}")
     or die (mysqli_error($conn));
     while ($row = mysqli_fetch_array($query)) {
             echo"
@@ -83,6 +78,6 @@ function logout() {
     console.log('logout');
 }
 function editUser() {
-    document.location = '/views/create-or-update-user.php'
+    document.location = '/views/update-user.php'
 }
 </script>

@@ -1,14 +1,7 @@
 <?php 
 include '../index.php';
 
-if(isset($_SESSION['user'])) {
-  $user_id = $_SESSION['user'];
-  $sql = "SELECT * FROM users WHERE id = $user_id";
-  $result = $conn -> query($sql);
-  $user = $result -> fetch_assoc();
-}
-
-if(isset($_POST['submit']))
+if(isset($_POST))
 {    
      $full_name = $_POST['full_name'];
      $user_name = $_POST['user_name'];
@@ -17,11 +10,13 @@ if(isset($_POST['submit']))
      $birth_date = $_POST['birth_date'];
      $password = $_POST['password'];
      $dni = $_POST['dni'];
-     $sql = "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) 
-     VALUES ('$full_name', '$dni', '$birth_date', $phone, '$email', '$password', '$user_name')";
+     $sql = "UPDATE users
+     SET full_name = '$full_name', dni = '$dni', birth_date = '$birth_date', phone = $phone, email = '$email', password = '$password', user_name = '$user_name'
+     WHERE id = {$user['id']}
+     ";
      if (mysqli_query($conn, $sql)) {
         // se podria tirar una alerta o algo
-        require __DIR__ . '/views/login.php';
+        require __DIR__ . '/armario.php';
      } else {
         // Mostrar error en pantalla
         // echo "Error: " . $sql . ":-" . mysqli_error($conn);
@@ -52,7 +47,7 @@ if(isset($_POST['submit']))
     "; ?>
   </div>
   <div class="bg-gray-900 min-h-screen p-10 ">
-    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" name="form" class="w-3/4">
+    <form action="" method="POST" id="form" class="w-3/4">
       <label class="block text-gray-400 mb-2" for="full_name">
         Nombre y Apellido
       </label>
@@ -124,7 +119,7 @@ if(isset($_POST['submit']))
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
       <div>
-        <input type="submit" name="submit" value="<?php if($user) echo "Guardar"; else echo "registrarse"; ?>" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
+        <input type="button" onclick="update()" name="btnSubmit" value="Guardar" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
       </div>
     </form>
     </div>
@@ -132,10 +127,9 @@ if(isset($_POST['submit']))
 </html>
 
 <script>
-  function register() {
+  function update() {
     if(validateForm()) {
-      console.log('register')
-      document.form.submit();
+      document.getElementById("form").submit();
     }
   }
 
