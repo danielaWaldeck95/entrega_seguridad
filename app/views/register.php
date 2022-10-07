@@ -43,7 +43,7 @@ if(isset($_POST))
         Nombre y Apellido
       </label>
       <div class="mb-3">
-        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="full_name" name="full_name" type="text" placeholder="Nombre">
+        <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="full_name" name="full_name" type="text" placeholder="Ingrese su nombre y apellido">
         <p id="full_name_error" class="hidden text-rose-600 text-xs">Los caracteres deben ser alfabéticos</p>
       </div>
 
@@ -61,14 +61,14 @@ if(isset($_POST))
           <label class="block text-gray-400 mb-2" for="name">
             DNI
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="dni" name="dni" type="text" placeholder="DNI" >
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="dni" name="dni" type="text" placeholder="11111111-Z" >
           <p id="dni_error" class="hidden text-rose-600 text-xs">El formato debe ser del tipo 11111111-Z y la letra debe verificar los números</p>
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="phoneNumber">
             Teléfono
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="phone" name="phone" type="text" placeholder="Teléfono" >
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="phone" name="phone" type="text" placeholder="999 999 999" >
           <p id="phone_error" class="hidden text-rose-600 text-xs">El teléfono debe tener 9 digitos</p>
         </div>
       </div>
@@ -78,7 +78,7 @@ if(isset($_POST))
               Email
           </label>
           <div class="mb-3">
-            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="Email">
+            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="email" name="email" type="email" placeholder="example@test.com">
             <p id="email_error" class="hidden text-rose-600 text-xs">El formato de email debe ser del tipo example@test.com</p>
           </div>
         </div>
@@ -89,7 +89,7 @@ if(isset($_POST))
             Nombre de Usuario
           </label>
           <div class="mb-3">
-            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="user_name" name="user_name" type="text" placeholder="Usuario" >
+            <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="user_name" name="user_name" type="text" placeholder="Ingrese un nombre de usuario" >
             <p id="user_name_error" class="hidden text-rose-600 text-xs">Debe ingresar un nombre de usuario</p>
           </div>
         </div>
@@ -99,18 +99,19 @@ if(isset($_POST))
           <label class="block text-gray-400 mb-2" for="password">
             Contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Ingrese una contraseña">
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="confirm_password">
             Repetir contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password" placeholder="Repita su contraseña">
         </div>
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
-      <div>
-        <input type="button" onclick="register()" name="btnSubmit" value="Registrarse" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
+        <input type="button" onclick="register()" name="btnSubmit" value="Registrarse" class="cursor-pointer bg-rose-600 px-3 py-2 rounded my-4"/>
+       <div>
+         Ya tienes una cuenta? <a href="/views/login.php" class="font-medium text-rose-600 hover:underline">Iniciar sesión</a>
       </div>
     </form>
     </div>
@@ -130,10 +131,18 @@ if(isset($_POST))
       document.getElementById(error).classList.add('hidden');
       document.getElementById(error).classList.remove('block');
     });
-    if(!validateFullName() || !validateDNI() || !validatePhone() || !validateEmail() || !validateBirthDate() || !validatePassword() || !validateUserName()) {
-      return false
-    }
-    return true;
+    validateAll();
+    return validateFullName() && validateBirthDate() && validateDNI() && validatePhone() && validateEmail() && validateUserName() && validatePassword();
+  }
+
+  function validateAll() {
+    validateFullName();
+    validateBirthDate();
+    validateDNI();
+    validatePhone();
+    validateEmail();
+    validateUserName();
+    validatePassword();
   }
 
   function validateUserName() {
@@ -159,7 +168,7 @@ if(isset($_POST))
 
   function validateBirthDate() {
     let birthDate = document.getElementById("birth_date").value;
-    if (birthDate == '' || !validBirthDate(birthDate)) {
+    if (birthDate == null || !validBirthDate(birthDate)) {
       document.getElementById("birth_date_error").classList.add('block');
       document.getElementById("birth_date_error").classList.remove('hidden');
       return false;
@@ -179,6 +188,7 @@ if(isset($_POST))
 
   function validatePhone() {
     let phone = document.getElementById("phone").value;
+    phone = phone.split(' ').join('');
     if (phone == '' || !validPhone(phone)) {
       document.getElementById("phone_error").classList.add('block');
       document.getElementById("phone_error").classList.remove('hidden');
