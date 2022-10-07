@@ -33,36 +33,47 @@ if(isset($_GET['del'])) {
     <?php
     $query = mysqli_query($conn, "SELECT DISTINCT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = {$user['id']}")
     or die (mysqli_error($conn));
-    while ($row = mysqli_fetch_array($query)) {
-            echo"
-                <div class='text-2xl mb-4'>{$row['category_name']}</div>
-                <div class='flex flex-wrap mb-4'>
-            ";
-             $newQuery = mysqli_query($conn, "SELECT * FROM products WHERE user_id = {$user['id']} AND category_id = {$row['category_id']}")
-                or die (mysqli_error($conn));
-                while ($row = mysqli_fetch_array($newQuery)) {
-                        echo
-                        "<div class='overflow-hidden w-64 mr-4 mb-4'>
-                            <img class='object-cover rounded-xl h-48 w-96 mb-2' src='/shared/default.png' alt=''>
-                            <div class='flex justify-between items-center text-gray-300 px-1'>
-                                <div>
-                                    <div>{$row['brand']}</div>
-                                    <div class='text-xs'>Talle {$row['size']}</div>
-                                </div>
-                                <div class='flex space-x-4'>
-                                    <i class='fa fa-pencil fa-lg cursor-pointer' onclick='updateProduct({$row['id']})' aria-hidden='true'></i>
-                                    <i class='fa fa-trash fa-lg cursor-pointer' onclick='deleteProduct({$row['id']})' aria-hidden='true'></i>
+    if(mysqli_num_rows($query) <= 0) {
+        // Empty State
+        echo"
+        <div class='text-2xl mb-2'>No tienes prendas en tu armario aun.</div>
+        <div class='text-2xl'>
+            Haz click <span class='text-rose-600 cursor-pointer hover:opacity-80' onclick='createProduct()'>aquí</span> para añadir una prenda!
+        </div>
+    ";
+    }
+    else {
+        while ($row = mysqli_fetch_array($query)) {
+                echo"
+                    <div class='text-2xl mb-4'>{$row['category_name']}</div>
+                    <div class='flex flex-wrap mb-4'>
+                ";
+                $newQuery = mysqli_query($conn, "SELECT * FROM products WHERE user_id = {$user['id']} AND category_id = {$row['category_id']}")
+                    or die (mysqli_error($conn));
+                    while ($row = mysqli_fetch_array($newQuery)) {
+                            echo
+                            "<div class='overflow-hidden w-64 mr-4 mb-4'>
+                                <img class='object-cover rounded-xl h-48 w-96 mb-2' src='/shared/default.png' alt=''>
+                                <div class='flex justify-between items-center text-gray-300 px-1'>
+                                    <div>
+                                        <div>{$row['brand']}</div>
+                                        <div class='text-xs'>Talle {$row['size']}</div>
+                                    </div>
+                                    <div class='flex space-x-4'>
+                                        <i class='fa fa-pencil fa-lg cursor-pointer' onclick='updateProduct({$row['id']})' aria-hidden='true'></i>
+                                        <i class='fa fa-trash fa-lg cursor-pointer' onclick='deleteProduct({$row['id']})' aria-hidden='true'></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        ";
-                    }
-            echo "
-                </div>
-            ";
+                            ";
+                        }
+                echo "
+                    </div>
+                ";
+        }
     }
     ?>
-    <div class="bg-rose-600 rounded-full p-6 h-6 w-6 flex items-center justify-center cursor-pointer fixed right-10 bottom-10" onClick="createProduct()">
+    <div class="bg-rose-600 rounded-full p-6 h-6 w-6 flex items-center justify-center cursor-pointer fixed right-10 bottom-10 hover:opacity-80" onclick="createProduct()">
         <i class="fa fa-plus fa-lg cursor-pointer" aria-hidden="true"></i>
     </div>
 </div>
