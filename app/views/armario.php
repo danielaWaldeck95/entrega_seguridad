@@ -1,6 +1,13 @@
 <?php 
 include '../index.php';
 
+if(isset($_GET['del'])) {
+    $id = $_GET["del"];
+  
+    $sql = "DELETE FROM products WHERE id = $id";
+    mysqli_query($conn, $sql);
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +25,7 @@ include '../index.php';
     </div>
     <div class="flex items-center space-x-4">
         <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['full_name']}"?></div>
-        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
+        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' aria-hidden='true'></a>
     </div>
 
   </div>
@@ -64,8 +71,8 @@ include '../index.php';
 
 <script>
 function deleteProduct($id) {
-  if (window.confirm('seguro quieres eliminar este elemento: ' + $id)) {
-    // Eliminar y volver a cargar la lista de productos
+  if (window.confirm('Seguro quieres eliminar este elemento?')) {
+    document.location = '/views/armario.php?del=' + $id
   }
 }
 function updateProduct($id) {
@@ -73,9 +80,6 @@ function updateProduct($id) {
 }
 function createProduct() {
     document.location = '/views/create-or-update-product.php';
-}
-function logout() {
-    console.log('logout');
 }
 function editUser() {
     document.location = '/views/update-user.php'

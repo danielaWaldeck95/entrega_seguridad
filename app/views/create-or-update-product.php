@@ -73,7 +73,7 @@ if(isset($_POST) && !empty($_POST))
     </div>
     <div class="flex items-center space-x-4">
         <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['full_name']}"?></div>
-        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
+        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' aria-hidden='true'></a>
     </div>
   </div>
   <div class="bg-gray-900 min-h-screen p-8">

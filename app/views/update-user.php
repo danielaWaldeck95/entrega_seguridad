@@ -42,7 +42,7 @@ if(isset($_POST))
     <?php if($user) echo "
         <div class='flex items-center space-x-4'>
           <div class='cursor-pointer'>{$user['full_name']}</div>
-          <a href='/views/logout.php' class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
+          <a href='/views/logout.php' class='fa fa-sign-out fa-lg cursor-pointer' aria-hidden='true'></a>
         </div>
     "; ?>
   </div>
