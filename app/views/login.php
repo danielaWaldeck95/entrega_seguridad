@@ -45,7 +45,7 @@ if(isset($_POST['submit']))
                 </div>
                 <input type="submit" name="submit" class="w-full text-white bg-gray-900 hover:bg-rose-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center" value="Sign in"/>
                 <p class="text-sm font-light">
-                    No tienes una cuenta? <a href="/views/create-or-update-user.php" class="font-medium text-rose-600 hover:underline">Registrate</a>
+                    No tienes una cuenta? <a href="/views/register.php" class="font-medium text-rose-600 hover:underline">Registrate</a>
                 </p>
             </form>
         </div>

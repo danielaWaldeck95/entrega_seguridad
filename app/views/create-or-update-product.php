@@ -1,16 +1,59 @@
 <?php
 include '../index.php';
 
-$user = $_SESSION['user'];
-$id = $_GET["id"];
+if(isset($_GET['id'])) {
+  $id = $_GET["id"];
 
-if($id) {
-    $sql = "SELECT * FROM products WHERE id = $id";
-    $result = $conn -> query($sql);
-    $product = $result -> fetch_assoc();  
-    $result -> free_result();
+  $sql = "SELECT * FROM products WHERE id = $id";
+  $result = $conn -> query($sql);
+  $product = $result -> fetch_assoc();  
+  $result -> free_result();
+
+  // UPDATE PRODUCT
+  if(isset($_POST) && !empty($_POST))
+  {    
+    $name = $_POST['name'];
+    $brand = $_POST['brand'];
+    $size = $_POST['size'];
+    $color = $_POST['color'];
+    $category_id = $_POST['category_id'];
+
+    $sql = "UPDATE products
+    SET name = '$name', brand = '$brand', size = '$size', color = '$color', category_id = $category_id
+    WHERE id = $id
+    ";
+
+    if (mysqli_query($conn, $sql)) {
+      // se podria tirar una alerta o algo
+      header("Location: /views/armario.php");
+    } else {
+      // Mostrar error en pantalla
+      // echo "Error: " . $sql . ":-" . mysqli_error($conn);
+    }
+  } 
+} else {
+// ADD NEW PRODUCT
+if(isset($_POST) && !empty($_POST))
+{    
+  $name = $_POST['name'];
+  $brand = $_POST['brand'];
+  $size = $_POST['size'];
+  $color = $_POST['color'];
+  $category_id = $_POST['category_id'];
+
+  $sql = "INSERT INTO products (name, brand, size, category_id, color, user_id) 
+  VALUES ('$name', '$brand', '$size', $category_id, '$color', {$user['id']})";
+  
+  if (mysqli_query($conn, $sql)) {
+    // se podria tirar una alerta o algo
+    header("Location: /views/armario.php");
+  } else {
+    // Mostrar error en pantalla
+    // echo "Error: " . $sql . ":-" . mysqli_error($conn);
+  }
 }
 
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,40 +73,41 @@ if($id) {
     </div>
     <div class="flex items-center space-x-4">
         <div class="cursor-pointer" onclick="editUser()"><?php echo"{$user['full_name']}"?></div>
-        <i class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></i>
+        <a href="/views/logout.php" class='fa fa-sign-out fa-lg cursor-pointer' onclick='logout()' aria-hidden='true'></a>
     </div>
   </div>
   <div class="bg-gray-900 min-h-screen p-8">
-      <form action="" class="w-1/2">
+  <!-- ../insert-product.php -->
+      <form action="" method="POST" class="w-1/2" id="form" name="form">
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="name">
             Nombre
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['name']}";?>" id="name" type="text" placeholder="Escriba el nombre de su prenda">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['name']}";?>" id="name" name="name" type="text" placeholder="Escriba el nombre de su prenda">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="brand">
             Marca
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['brand']}";?>" id="brand" type="text" placeholder="Cuál es su marca?">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['brand']}";?>" id="brand" name="brand" type="text" placeholder="Cuál es su marca?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="size">
             Talle
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['size']}";?>" id="size" type="text" placeholder="Cuál es su talle?">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['size']}";?>" id="size" name="size" type="text" placeholder="Cuál es su talle?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="color">
             Color
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['color']}";?>" id="color" type="text" placeholder="Cuál es su color?">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['color']}";?>" id="color" name="color" type="text" placeholder="Cuál es su color?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="category">
             Categoría
           </label>
-          <select id="categories" class="bg-gray-700 text-sm rounded-lg block w-full py-2 px-3 focus:outline-none">
+          <select id="categories" name='category_id' class="bg-gray-700 text-sm rounded-lg block w-full py-2 px-3 focus:outline-none">
             <option disabled selected value>Seleccione una categoría</option>
             <?php 
               $query = mysqli_query($conn, "SELECT * FROM categories")
@@ -82,12 +126,9 @@ if($id) {
             ?>
           </select>
         </div>
+        <input type='submit' class='bg-rose-600 px-3 py-2 rounded mt-4' onclick='save()' value='Guardar' />
       </form>
-      <?php
-      echo "
-      <button class='bg-rose-600 px-3 py-2 rounded mt-4' onClick='save({$product})'>Guardar</button>
-      ";
-      ?>
+
   </div>
 </body>
 </html>
@@ -96,17 +137,11 @@ if($id) {
   function back() {
     document.location = '/views/armario.php';
   }
-  function save($isUpdate) {
-    if($isUpdate) {
-      console.log('update');
-      document.location = '/views/armario.php'
-    } else {
-    $product = document.getElementById('name').value;
-    window.alert('El producto '+ $product +' se ha agregado correctamente')
-    document.location = '/views/armario.php'
-    }
+  function save() {
+    console.log('save');
+    // document.form.submit();
   }
   function editUser() {
-    document.location = '/views/create-or-update-user.php'
+    document.location = '/views/update-user.php'
   }
 </script>
