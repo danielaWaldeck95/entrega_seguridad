@@ -1,27 +1,26 @@
 <?php 
 include '../index.php';
 
-if(isset($_POST))
+if(isset($_POST) && !empty($_POST))
 {    
-     $full_name = $_POST['full_name'];
-     $user_name = $_POST['user_name'];
-     $email = $_POST['email'];
-     $phone = $_POST['phone'];
-     $birth_date = $_POST['birth_date'];
-     $password = $_POST['password'];
-     $dni = $_POST['dni'];
-     $sql = "UPDATE users
-     SET full_name = '$full_name', dni = '$dni', birth_date = '$birth_date', phone = $phone, email = '$email', password = '$password', user_name = '$user_name'
-     WHERE id = {$user['id']}
-     ";
-     if (mysqli_query($conn, $sql)) {
-        // se podria tirar una alerta o algo
-        require __DIR__ . '/armario.php';
-     } else {
-        // Mostrar error en pantalla
-        // echo "Error: " . $sql . ":-" . mysqli_error($conn);
-     }
-     mysqli_close($conn);
+    $full_name = $_POST['full_name'];
+    $user_name = $_POST['user_name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $birth_date = $_POST['birth_date'];
+    $password = $_POST['password'];
+    $dni = $_POST['dni'];
+    $sql = "UPDATE users
+    SET full_name = '$full_name', dni = '$dni', birth_date = '$birth_date', phone = $phone, email = '$email', password = '$password', user_name = '$user_name'
+    WHERE id = {$user['id']}
+    ";
+    if (mysqli_query($conn, $sql)) {
+      header("Location: /views/armario.php");
+    } else {
+      // Set error
+      $_SESSION["UpdateUser.Error"] = mysqli_error($conn);
+    }
+    mysqli_close($conn);
 }
 
 
@@ -37,6 +36,7 @@ if(isset($_POST))
 <body class="text-white">
   <div class="bg-gray-800 p-8 flex justify-between items-start">
     <div> 
+      <i class="fa fa-chevron-left fa-lg cursor-pointer mb-4" aria-hidden="true" onClick="back()"></i>
       <div class="text-5xl font-bold"><?php if($user) echo "Modificar datos del usuario"; else echo "Registrarse"; ?></div>
     </div>
     <?php if($user) echo "
@@ -121,6 +121,7 @@ if(isset($_POST))
       <div>
         <input type="button" onclick="update()" name="btnSubmit" value="Guardar" class="cursor-pointer bg-rose-600 px-3 py-2 rounded mt-4"/>
       </div>
+      <p class="mt-2 text-rose-600 text-xs"><?php if($_SESSION["UpdateUser.Error"]) echo "{$_SESSION['UpdateUser.Error']}"?></p>
     </form>
     </div>
   </body>
@@ -139,10 +140,18 @@ if(isset($_POST))
       document.getElementById(error).classList.add('hidden');
       document.getElementById(error).classList.remove('block');
     });
-    if(!validateFullName() || !validateDNI() || !validatePhone() || !validateEmail() || !validateBirthDate() || !validatePassword() || !validateUserName()) {
-      return false
-    }
-    return true;
+    validateAll();
+    return validateFullName() && validateBirthDate() && validateDNI() && validatePhone() && validateEmail() && validateUserName() && validatePassword();
+  }
+
+  function validateAll() {
+    validateFullName();
+    validateBirthDate();
+    validateDNI();
+    validatePhone();
+    validateEmail();
+    validateUserName();
+    validatePassword();
   }
 
   function validateUserName() {
@@ -168,7 +177,7 @@ if(isset($_POST))
 
   function validateBirthDate() {
     let birthDate = document.getElementById("birth_date").value;
-    if (birthDate == '' || !validBirthDate(birthDate)) {
+    if (birthDate == null || !validBirthDate(birthDate)) {
       document.getElementById("birth_date_error").classList.add('block');
       document.getElementById("birth_date_error").classList.remove('hidden');
       return false;
@@ -188,6 +197,7 @@ if(isset($_POST))
 
   function validatePhone() {
     let phone = document.getElementById("phone").value;
+    phone = phone.split(' ').join('');
     if (phone == '' || !validPhone(phone)) {
       document.getElementById("phone_error").classList.add('block');
       document.getElementById("phone_error").classList.remove('hidden');
@@ -250,5 +260,8 @@ if(isset($_POST))
   {
    var regexpresion =  /^[a-zA-Z\s]*$/;  
    return regexpresion.test(str);
+  }
+  function back() {
+    document.location = '/views/armario.php';
   }
 </script>
