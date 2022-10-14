@@ -24,11 +24,11 @@ if(isset($_GET['id'])) {
     ";
 
     if (mysqli_query($conn, $sql)) {
-      // se podria tirar una alerta o algo
+      // Redirect after successful update
       header("Location: /views/armario.php");
     } else {
-      // Mostrar error en pantalla
-      // echo "Error: " . $sql . ":-" . mysqli_error($conn);
+      // Set error
+      $_SESSION["createOrUpdateProduct.Error"] = mysqli_error($conn);
     }
   } 
 } else {
@@ -45,11 +45,11 @@ if(isset($_POST) && !empty($_POST))
   VALUES ('$name', '$brand', '$size', $category_id, '$color', {$user['id']})";
   
   if (mysqli_query($conn, $sql)) {
-    // se podria tirar una alerta o algo
+    // Redirect after successful insert
     header("Location: /views/armario.php");
   } else {
-    // Mostrar error en pantalla
-    // echo "Error: " . $sql . ":-" . mysqli_error($conn);
+    // Set error
+    $_SESSION["createOrUpdateProduct.Error"] = mysqli_error($conn);
   }
 }
 
@@ -83,31 +83,31 @@ if(isset($_POST) && !empty($_POST))
           <label class="block text-gray-400 mb-2" for="name">
             Nombre
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['name']}";?>" id="name" name="name" type="text" placeholder="Escriba el nombre de su prenda">
+          <input required class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['name']}";?>" id="name" name="name" type="text" placeholder="Escriba el nombre de su prenda">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="brand">
             Marca
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['brand']}";?>" id="brand" name="brand" type="text" placeholder="Cuál es su marca?">
+          <input required class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['brand']}";?>" id="brand" name="brand" type="text" placeholder="Cuál es su marca?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="size">
             Talle
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['size']}";?>" id="size" name="size" type="text" placeholder="Cuál es su talle?">
+          <input required class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['size']}";?>" id="size" name="size" type="text" placeholder="Cuál es su talle?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="color">
             Color
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['color']}";?>" id="color" name="color" type="text" placeholder="Cuál es su color?">
+          <input required class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" value="<?php if($product) echo "{$product['color']}";?>" id="color" name="color" type="text" placeholder="Cuál es su color?">
         </div>
         <div class="mb-4">
           <label class="block text-gray-400 mb-2" for="category">
             Categoría
           </label>
-          <select id="categories" name='category_id' class="bg-gray-700 text-sm rounded-lg block w-full py-2 px-3 focus:outline-none">
+          <select required id="categories" name='category_id' class="bg-gray-700 text-sm rounded-lg block w-full py-2 px-3 focus:outline-none">
             <option disabled selected value>Seleccione una categoría</option>
             <?php 
               $query = mysqli_query($conn, "SELECT * FROM categories")
@@ -126,7 +126,8 @@ if(isset($_POST) && !empty($_POST))
             ?>
           </select>
         </div>
-        <input type='submit' class='bg-rose-600 px-3 py-2 rounded mt-4' onclick='save()' value='Guardar' />
+        <input required type='submit' class='bg-rose-600 px-3 py-2 rounded mt-4' value='Guardar' />
+        <p class="mt-2 text-rose-600 text-xs"><?php if($_SESSION["createOrUpdateProduct.Error"]) echo "{$_SESSION['createOrUpdateProduct.Error']}"?></p>      
       </form>
 
   </div>
@@ -136,10 +137,6 @@ if(isset($_POST) && !empty($_POST))
 <script>
   function back() {
     document.location = '/views/armario.php';
-  }
-  function save() {
-    console.log('save');
-    // document.form.submit();
   }
   function editUser() {
     document.location = '/views/update-user.php'
