@@ -36,9 +36,9 @@ if(isset($_GET['del'])) {
     if(mysqli_num_rows($query) <= 0) {
         // Empty State
         echo"
-        <div class='text-2xl mb-2'>No tienes prendas en tu armario aun.</div>
-        <div class='text-2xl'>
-            Haz click <span class='text-rose-600 cursor-pointer hover:opacity-80' onclick='createProduct()'>aquí</span> para añadir una prenda!
+        <div class='text-lg text-center text-gray-400 mt-10 mb-2'>No tienes prendas en tu armario aun.</div>
+        <div class='text-lg text-center text-gray-400'>
+            Haz click <span class='text-2xl text-rose-600 cursor-pointer hover:opacity-80' onclick='createProduct()'>aquí</span> para añadir una prenda!
         </div>
     ";
     }
