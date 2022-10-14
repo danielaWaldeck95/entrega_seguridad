@@ -1,6 +1,13 @@
 <?php
 include '../config.php';
+session_start();
 
+// If user is already logged he cannot access login page
+if(isset($_SESSION['user'])){
+    header("Location: /views/armario.php");
+}
+
+// Submit login form
 if(isset($_POST['submit']))
 {    
 
@@ -16,6 +23,9 @@ if(isset($_POST['submit']))
         session_start();
         $_SESSION['user'] = $user['id'];
         header("Location: /views/armario.php");
+    } else {
+        // Set error
+        $_SESSION["Login.Error"] = "Nombre de usuario o contraseña incorrectos";
     }
 }
 
@@ -43,6 +53,7 @@ if(isset($_POST['submit']))
                     <label for="password" class="text-lg font-medium">Contraseña</label>
                     <input type="password" name="password" id="passwordLogIn" placeholder="Ingrese su contraseña" class="rounded-lg w-full mt-2 p-2.5 bg-gray-700 text-sm appearance-none focus:outline-none focus:shadow-outline" required="">
                 </div>
+                <p class="text-rose-600 text-xs"><?php if($_SESSION["Login.Error"]) echo "{$_SESSION['Login.Error']}"?></p>
                 <input type="submit" name="submit" class="w-full text-white bg-gray-900 hover:bg-rose-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center" value="Sign in"/>
                 <p class="text-sm font-light">
                     No tienes una cuenta? <a href="/views/register.php" class="font-medium text-rose-600 hover:underline">Registrate</a>
@@ -53,9 +64,3 @@ if(isset($_POST['submit']))
 </body>
 
 </html>
-
-<script>
-    function signin() {
-        document.location = '/views/armario.php';
-    }
-</script>
