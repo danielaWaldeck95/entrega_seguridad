@@ -1,7 +1,7 @@
 <?php 
 include '../config.php';
 
-if(isset($_POST))
+if(isset($_POST) && !empty($_POST))
 {    
      $full_name = $_POST['full_name'];
      $user_name = $_POST['user_name'];
@@ -15,10 +15,10 @@ if(isset($_POST))
      if (mysqli_query($conn, $sql)) {
         header("Location: /views/login.php");
      } else {
-      // ERROR
-      // mysqli_error($conn);
+      // Set error
+      $_SESSION["Register.Error"] = mysqli_error($conn);
      }
-    //  mysqli_close($conn);
+     mysqli_close($conn);
 }
 
 
@@ -110,7 +110,9 @@ if(isset($_POST))
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
         <input type="button" onclick="register()" name="btnSubmit" value="Registrarse" class="cursor-pointer bg-rose-600 px-3 py-2 rounded my-4"/>
-       <div>
+        <p class="mt-2 text-rose-600 text-xs"><?php if($_SESSION["Register.Error"]) echo "{$_SESSION['Register.Error']}"?></p>
+       
+        <div class="text-sm">
          Ya tienes una cuenta? <a href="/views/login.php" class="font-medium text-rose-600 hover:underline">Iniciar sesión</a>
       </div>
     </form>
