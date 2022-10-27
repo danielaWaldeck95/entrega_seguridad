@@ -1,19 +1,25 @@
+# Integrantes
+Daniela Waldeck
+Pedro Inciarte
 
-# Docker LAMP
-Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
+# Instrucciones
 
-## Instructions
+## Para desplegar el proyecto:
+1. Sitúa la terminal dentro del directorio donde tienes el proyecto
+2. Construye la imagen web: $ docker build -t="web" .
+3. Despliega los servicios mediante $ docker-compose up
+4. Visita la web en http://localhost:81. 
 
-Enter the following command to start your containers:
-```bash
-$ docker-compose up -d
-```
+Para añadir los datos necesarios, visita http://localhost:8890/
+usuario: admin
+contraseña: test
+Hacer click en "database" y luego en "import". Seleccionar archivo database.sql 
 
-To stop them, use this:
+Para frenar el container
 ```bash
 $ docker-compose stop
 ```
-
-Feel free to make pull requests and help to improve this.
-
-If you are looking for phpMyAdmin, take a look at [this](https://github.com/celsocelante/docker-lamp/issues/2).
+## Usuarios precargados
+Hemos dejado dos usuarios precargados
+1. Usuario: daniwal  contraseña: 12345678
+2. Usuario: peli     contraseña: 12345678
