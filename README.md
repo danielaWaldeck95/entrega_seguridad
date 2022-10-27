@@ -4,6 +4,11 @@ Pedro Inciarte
 
 # Instrucciones
 
+## Instalar dependencias
+$ npm install -D tailwindcss
+
+Si no tienes npm instalado primero debes hacer $ sudo apt install npm
+
 ## Para desplegar el proyecto:
 1. Sitúa la terminal dentro del directorio donde tienes el proyecto
 2. Construye la imagen web: $ docker build -t="web" .
