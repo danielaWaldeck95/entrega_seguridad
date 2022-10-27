@@ -5,7 +5,7 @@ Pedro Inciarte
 # Instrucciones
 
 ## Instalar dependencias
-$ npm install
+$ npm install -D tailwindcss
 
 Si no tienes npm instalado primero debes hacer $ sudo apt install npm
 
