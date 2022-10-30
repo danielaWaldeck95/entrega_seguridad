@@ -9,6 +9,11 @@ if(isset($_GET['id'])) {
   $product = $result -> fetch_assoc();  
   $result -> free_result();
 
+  if ($product['user_id'] != $user_id)
+  {
+    header("Location: /views/access-denied.php");
+  }
+  
   // UPDATE PRODUCT
   if(isset($_POST) && !empty($_POST))
   {    
