@@ -15,20 +15,20 @@ db:
   volumes:
     - ./mysql:/var/lib/mysql
   environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_USER: admin
-    MYSQL_PASSWORD: test
+    MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    MYSQL_USER: ${MYSQL_USER}
+    MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     MYSQL_DATABASE: database
   ports:
     - "8889:3306"
 
 phpmyadmin:
-  image: phpmyadmin/phpmyadmin:latest
+  image: phpmyadmin
   links:
     - db
   ports:
     - 8890:80
   environment:
-    MYSQL_USER: admin
-    MYSQL_PASSWORD: test
+    MYSQL_USER: ${MYSQL_USER}
+    MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     MYSQL_DATABASE: database
