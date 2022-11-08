@@ -18,7 +18,7 @@ if(isset($_POST) && !empty($_POST))
       header("Location: /views/armario.php");
     } else {
       // Set error
-      $_SESSION["UpdateUser.Error"] = mysqli_error($conn);
+      $_SESSION["UpdateUser.Error"] = 'Hubo un inconveniente al procesar sus cambios, inténtalo nuevamente';
     }
     mysqli_close($conn);
 }
