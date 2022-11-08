@@ -32,7 +32,7 @@ if(isset($_GET['del'])) {
 <div class="bg-gray-900 min-h-screen p-8">
     <?php
     $query = mysqli_query($conn, "SELECT DISTINCT c.name as 'category_name', c.id as 'category_id' FROM categories c, products p WHERE p.category_id = c.id AND p.user_id = {$user['id']}")
-    or die (mysqli_error($conn));
+    or die;
     if(mysqli_num_rows($query) <= 0) {
         // Empty State
         echo"
@@ -49,7 +49,7 @@ if(isset($_GET['del'])) {
                     <div class='flex flex-wrap mb-4'>
                 ";
                 $newQuery = mysqli_query($conn, "SELECT * FROM products WHERE user_id = {$user['id']} AND category_id = {$row['category_id']}")
-                    or die (mysqli_error($conn));
+                    or die;
                     while ($row = mysqli_fetch_array($newQuery)) {
                             echo
                             "<div class='overflow-hidden w-64 mr-4 mb-4'>

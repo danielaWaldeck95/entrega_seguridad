@@ -33,7 +33,7 @@ if(isset($_GET['id'])) {
       header("Location: /views/armario.php");
     } else {
       // Set error
-      $_SESSION["createOrUpdateProduct.Error"] = mysqli_error($conn);
+      $_SESSION["createOrUpdateProduct.Error"] = 'Hubo un inconveniente al procesar sus cambios, inténtalo nuevamente';
     }
   } 
 } else {
@@ -54,7 +54,7 @@ if(isset($_POST) && !empty($_POST))
     header("Location: /views/armario.php");
   } else {
     // Set error
-    $_SESSION["createOrUpdateProduct.Error"] = mysqli_error($conn);
+    $_SESSION["createOrUpdateProduct.Error"] = 'Hubo un inconveniente al guardar sus cambios, inténtalo nuevamente';
   }
 }
 
@@ -116,7 +116,7 @@ if(isset($_POST) && !empty($_POST))
             <option disabled selected value>Seleccione una categoría</option>
             <?php 
               $query = mysqli_query($conn, "SELECT * FROM categories")
-              or die (mysqli_error($conn));
+              or die;
 
               while ($row = mysqli_fetch_array($query)) {
                   if($product['category_id']==htmlspecialchars($row['id']))

@@ -16,7 +16,7 @@ if(isset($_POST) && !empty($_POST))
         header("Location: /views/login.php");
      } else {
       // Set error
-      $_SESSION["Register.Error"] = mysqli_error($conn);
+      $_SESSION["Register.Error"] = '“Hubo un inconveniente al guardar sus cambios, inténtalo nuevamente”';
      }
      mysqli_close($conn);
 }
