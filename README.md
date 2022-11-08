@@ -4,6 +4,8 @@ Pedro Inciarte
 
 # Instrucciones
 
+Crear un archivo .env a partir del .env.example y asignar un valor a las variables que allí aparecen
+
 ## Para desplegar el proyecto:
 1. Sitúa la terminal dentro del directorio donde tienes el proyecto
 2. Construye la imagen web: $ docker build -t="web" .
@@ -11,8 +13,8 @@ Pedro Inciarte
 4. Visita la web en http://localhost:81. 
 
 Para añadir los datos necesarios, visita http://localhost:8890/
-usuario: admin
-contraseña: test
+usuario: 'el usuario definido en .env'
+contraseña: 'la contraseña definida en .env'
 Hacer click en "database" y luego en "import". Seleccionar archivo database.sql 
 
 Para frenar el container
