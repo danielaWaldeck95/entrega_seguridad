@@ -9,15 +9,24 @@ if(isset($_SESSION['user'])){
 
 // Submit login form
 if(isset($_POST['submit']))
-{    
-
+{   
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, "SELECT * FROM users WHERE user_name=?");
+    mysqli_stmt_bind_param($stmt, "s", $username);
+   
     $username = $_POST['user_name'];
-    $pw = $_POST['password'];
-    
-    $sql = "SELECT * FROM users WHERE user_name = '$username'";
-    $result = $conn -> query($sql);
-    $user = $result -> fetch_assoc();
+  
+    $result = mysqli_stmt_execute($stmt);
+  
+    if ($result) {
+        $stmtResult = $stmt->get_result();
+        $user = $stmtResult->fetch_array();
+    }
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
 
+
+    $pw = $_POST['password'];
     if($pw == $user['password'])
     {    
         session_start();

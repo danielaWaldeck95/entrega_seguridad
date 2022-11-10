@@ -3,24 +3,31 @@ include '../index.php';
 
 if(isset($_POST) && !empty($_POST))
 {    
-    $full_name = $_POST['full_name'];
-    $user_name = $_POST['user_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $birth_date = $_POST['birth_date'];
-    $password = $_POST['password'];
-    $dni = $_POST['dni'];
-    $sql = "UPDATE users
-    SET full_name = '$full_name', dni = '$dni', birth_date = '$birth_date', phone = $phone, email = '$email', password = '$password', user_name = '$user_name'
-    WHERE id = {$user['id']}
-    ";
-    if (mysqli_query($conn, $sql)) {
-      header("Location: /views/armario.php");
-    } else {
-      // Set error
-      $_SESSION["UpdateUser.Error"] = 'Hubo un inconveniente al procesar sus cambios, inténtalo nuevamente';
-    }
-    mysqli_close($conn);
+  $stmt = mysqli_stmt_init($conn);
+  mysqli_stmt_prepare($stmt, "UPDATE users
+  SET full_name=?, dni=?, birth_date=?, phone=?, email=?, password=?, user_name=?
+  WHERE id =?
+  ");
+  mysqli_stmt_bind_param($stmt, "sssisssi", $full_name, $dni, $birth_date, $phone, $email, $password, $user_name, $id);
+ 
+  $full_name = $_POST['full_name'];
+  $user_name = $_POST['user_name'];
+  $email = $_POST['email'];
+  $phone = $_POST['phone'];
+  $birth_date = $_POST['birth_date'];
+  $password = $_POST['password'];
+  $dni = $_POST['dni'];
+  $id = $user['id'];
+
+  $result = mysqli_stmt_execute($stmt);
+
+  if ($result) {
+    header("Location: /views/armario.php");
+  } else {
+    $_SESSION["UpdateUser.Error"] = 'Hubo un inconveniente al procesar sus cambios, inténtalo nuevamente';
+  }
+  mysqli_stmt_close($stmt);
+  mysqli_close($conn);
 }
 
 
