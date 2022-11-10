@@ -2,10 +2,16 @@
 include '../index.php';
 
 if(isset($_GET['del'])) {
+    $user_id = $_SESSION['user'];
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, "DELETE FROM products WHERE id=?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+   
     $id = $_GET["del"];
-  
-    $sql = "DELETE FROM products WHERE id = $id";
-    mysqli_query($conn, $sql);
+
+    mysqli_stmt_execute($stmt);
+   
+    mysqli_stmt_close($stmt);
 }
 
 ?>

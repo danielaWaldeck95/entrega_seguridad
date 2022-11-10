@@ -2,12 +2,19 @@
 include '../index.php';
 
 if(isset($_GET['id'])) {
+  $stmt = mysqli_stmt_init($conn);
+  mysqli_stmt_prepare($stmt, "SELECT * FROM products WHERE id=?");
+  mysqli_stmt_bind_param($stmt, "i", $id);
+
   $id = $_GET["id"];
 
-  $sql = "SELECT * FROM products WHERE id = $id";
-  $result = $conn -> query($sql);
-  $product = $result -> fetch_assoc();  
-  $result -> free_result();
+  $result = mysqli_stmt_execute($stmt);
+  
+  if ($result) {
+    $stmtResult = $stmt->get_result();
+    $product = $stmtResult->fetch_array();
+  }
+
 
   if ($product['user_id'] != $user_id)
   {
@@ -17,45 +24,58 @@ if(isset($_GET['id'])) {
   // UPDATE PRODUCT
   if(isset($_POST) && !empty($_POST))
   {    
+    $stmt = mysqli_stmt_init($conn);
+    mysqli_stmt_prepare($stmt, "UPDATE products
+    SET name=?, brand=? , size=?, color=?, category_id=?
+    WHERE id=?
+    ");
+    mysqli_stmt_bind_param($stmt, "ssssii", $name, $brand, $size, $color, $category_id, $id);
+   
     $name = $_POST['name'];
     $brand = $_POST['brand'];
     $size = $_POST['size'];
     $color = $_POST['color'];
     $category_id = $_POST['category_id'];
-
-    $sql = "UPDATE products
-    SET name = '$name', brand = '$brand', size = '$size', color = '$color', category_id = $category_id
-    WHERE id = $id
-    ";
-
-    if (mysqli_query($conn, $sql)) {
+  
+    $result = mysqli_stmt_execute($stmt);
+  
+    if ($result) {
       // Redirect after successful update
       header("Location: /views/armario.php");
     } else {
       // Set error
       $_SESSION["createOrUpdateProduct.Error"] = 'Hubo un inconveniente al procesar sus cambios, inténtalo nuevamente';
     }
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
   } 
 } else {
 // ADD NEW PRODUCT
 if(isset($_POST) && !empty($_POST))
 {    
+  $stmt = mysqli_stmt_init($conn);
+  mysqli_stmt_prepare($stmt, "INSERT INTO products (name, brand, size, category_id, color, user_id) 
+  VALUES (?, ?, ?, ?, ?, ?)");
+  mysqli_stmt_bind_param($stmt, "sssisi", $name, $brand, $size, $category_id, $color, $user_id);
+ 
   $name = $_POST['name'];
   $brand = $_POST['brand'];
   $size = $_POST['size'];
   $color = $_POST['color'];
   $category_id = $_POST['category_id'];
+  $user_id = $user['id'];
 
-  $sql = "INSERT INTO products (name, brand, size, category_id, color, user_id) 
-  VALUES ('$name', '$brand', '$size', $category_id, '$color', {$user['id']})";
-  
-  if (mysqli_query($conn, $sql)) {
+  $result = mysqli_stmt_execute($stmt);
+
+  if ($result) {
     // Redirect after successful insert
     header("Location: /views/armario.php");
   } else {
     // Set error
     $_SESSION["createOrUpdateProduct.Error"] = 'Hubo un inconveniente al guardar sus cambios, inténtalo nuevamente';
   }
+  mysqli_stmt_close($stmt);
+  mysqli_close($conn);
 }
 
 }

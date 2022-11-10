@@ -3,22 +3,27 @@ include '../config.php';
 
 if(isset($_POST) && !empty($_POST))
 {    
-     $full_name = $_POST['full_name'];
-     $user_name = $_POST['user_name'];
-     $email = $_POST['email'];
-     $phone = $_POST['phone'];
-     $birth_date = $_POST['birth_date'];
-     $password = $_POST['password'];
-     $dni = $_POST['dni'];
-     $sql = "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) 
-     VALUES ('$full_name', '$dni', '$birth_date', $phone, '$email', '$password', '$user_name')";
-     if (mysqli_query($conn, $sql)) {
-        header("Location: /views/login.php");
-     } else {
-      // Set error
-      $_SESSION["Register.Error"] = '“Hubo un inconveniente al guardar sus cambios, inténtalo nuevamente”';
-     }
-     mysqli_close($conn);
+  $stmt = mysqli_stmt_init($conn);
+  mysqli_stmt_prepare($stmt, "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) VALUES (?, ?, ?, ? ,?, ?, ?)");
+  mysqli_stmt_bind_param($stmt, "sssisss", $full_name, $dni, $birth_date, $phone, $email, $password, $user_name);
+ 
+  $full_name = $_POST['full_name'];
+  $user_name = $_POST['user_name'];
+  $email = $_POST['email'];
+  $phone = $_POST['phone'];
+  $birth_date = $_POST['birth_date'];
+  $password = $_POST['password'];
+  $dni = $_POST['dni'];
+
+  $result = mysqli_stmt_execute($stmt);
+
+  if ($result) {
+    header("Location: /views/login.php");
+  } else {
+    $_SESSION["Register.Error"] = 'Hubo un inconveniente al guardar sus cambios, inténtalo nuevamente';
+  }
+  mysqli_stmt_close($stmt);
+  mysqli_close($conn);
 }
 
 
