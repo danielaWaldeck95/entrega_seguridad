@@ -104,7 +104,7 @@ if(isset($_POST) && !empty($_POST))
           <label class="block text-gray-400 mb-2" for="password">
             Contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Ingrese una contraseña">
+          <input onkeyup="checkPasswordStrength()" class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Ingrese una contraseña">
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="confirm_password">
@@ -112,7 +112,10 @@ if(isset($_POST) && !empty($_POST))
           </label>
           <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password" placeholder="Repita su contraseña">
         </div>
-        <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
+        <div class="flex flex-col">
+          <p id="StrengthDisp" class="hidden px-3 text-xs text-gray-400 mt-2">Seguridad de la contraseña: <span id="StrengthDispValue">Weak</span></p>
+          <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
+        </div>
       </div>
         <input type="button" onclick="register()" name="btnSubmit" value="Registrarse" class="cursor-pointer bg-rose-600 px-3 py-2 rounded my-4"/>
         <p class="mt-2 text-rose-600 text-xs"><?php if($_SESSION["Register.Error"]) echo "{$_SESSION['Register.Error']}"?></p>
@@ -161,17 +164,47 @@ if(isset($_POST) && !empty($_POST))
     }
     return true;
   }
+  var weakPassword = true;
+  function checkPasswordStrength() {
+    let password = document.getElementById("password").value;
+    let strengthBadge = document.getElementById('StrengthDispValue');
+    document.getElementById('StrengthDisp').style.display = 'block';
+    let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+    let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
+    if(strongPassword.test(password)) {
+      strengthBadge.style.color = "green";
+      strengthBadge.textContent = 'Alta';
+      weakPassword = false;
+    } else if(mediumPassword.test(password)) {
+      strengthBadge.style.color = 'yellow';
+      strengthBadge.textContent = 'Media';
+      weakPassword = false;
+    } else {
+      strengthBadge.style.color = 'red';
+      strengthBadge.textContent = 'Baja';
+      weakPassword = true;
+    }
+  }
 
   function validatePassword() {
     let password = document.getElementById("password").value;
     let confirmation = document.getElementById("confirm_password").value;
+    let passwordError = document.getElementById("password_error");
+    if (weakPassword) {
+      passwordError.classList.add('block');
+      passwordError.classList.remove('hidden');
+      passwordError.textContent = 'La contraseña es demasiado insegura. Asegúrate de que el largo de la misma sea mayor a 8 y que incluya una minúscula, una mayúscula, un dígito y un caracter especial'
+      return false;
+    }
     if (password == '' || password !== confirmation) {
-      document.getElementById("password_error").classList.add('block');
-      document.getElementById("password_error").classList.remove('hidden');
+      passwordError.classList.add('block');
+      passwordError.classList.remove('hidden');
       return false;
     }
     return true;
   }
+
+  
 
   function validateBirthDate() {
     let birthDate = document.getElementById("birth_date").value;
