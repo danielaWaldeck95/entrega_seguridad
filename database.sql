@@ -36,6 +36,7 @@ CREATE TABLE users (
   email varchar(256) NOT NULL,
   password varchar(256) NOT NULL,
   user_name varchar(256) NOT NULL UNIQUE,
+  password_update DATETIME NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -74,9 +75,9 @@ CREATE TABLE products (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) VALUES
-('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '12345678', 'daniwal'),
-('Pedro Inciarte', '16760377-R', '2001-06-20', 999999999, 'pedro.iniciarte13@gmail.com', '12345678', 'peli');
+INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name, password_update) VALUES
+('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '12345678', 'daniwal', now()),
+('Pedro Inciarte', '16760377-R', '2001-06-20', 999999999, 'pedro.iniciarte13@gmail.com', '12345678', 'peli',now());
 
 --
 -- Volcado de datos para la tabla `categories`

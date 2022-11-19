@@ -1,6 +1,15 @@
 <?php 
 include '../index.php';
 
+$lastUpdate = $user['password_update'];
+$dateNow = date("Y-m-d H:i:s");
+$dateDifference = abs(strtotime($dateNow) - strtotime($lastUpdate));
+$years  = floor($dateDifference / (365 * 60 * 60 * 24));
+$months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+if($years >=1 or $months>=1){
+    header("Location: /views/reset-password.php");
+}
+
 if(isset($_GET['del'])) {
     $user_id = $_SESSION['user'];
     $stmt = mysqli_stmt_init($conn);

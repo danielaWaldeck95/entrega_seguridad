@@ -1,14 +1,22 @@
 <?php 
 include '../index.php';
+$lastUpdate = $user['password_update'];
+$dateNow = date("Y-m-d H:i:s");
+$dateDifference = abs(strtotime($dateNow) - strtotime($lastUpdate));
+$years  = floor($dateDifference / (365 * 60 * 60 * 24));
+$months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+if($years >=1 or $months>=1){
+    header("Location: /views/reset-password.php");
+}
 
 if(isset($_POST) && !empty($_POST))
 {    
   $stmt = mysqli_stmt_init($conn);
   mysqli_stmt_prepare($stmt, "UPDATE users
-  SET full_name=?, dni=?, birth_date=?, phone=?, email=?, password=?, user_name=?
+  SET full_name=?, dni=?, birth_date=?, phone=?, email=?, user_name=?, password_update = ?, password=?
   WHERE id =?
   ");
-  mysqli_stmt_bind_param($stmt, "sssisssi", $full_name, $dni, $birth_date, $phone, $email, $password, $user_name, $id);
+  mysqli_stmt_bind_param($stmt, "sssissssi", $full_name, $dni, $birth_date, $phone, $email, $user_name, $date, $password,$id);
  
   $full_name = $_POST['full_name'];
   $user_name = $_POST['user_name'];
@@ -17,6 +25,13 @@ if(isset($_POST) && !empty($_POST))
   $birth_date = $_POST['birth_date'];
   $password = $_POST['password'];
   $dni = $_POST['dni'];
+  if($_POST['password'] == ""){
+    $date = $user['password_update'];
+    $password = $user['password'];
+  }else{
+    $date = date("Y-m-d H:i:s");
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+  }
   $id = $user['id'];
 
   $result = mysqli_stmt_execute($stmt);
@@ -115,14 +130,15 @@ if(isset($_POST) && !empty($_POST))
           <label class="block text-gray-400 mb-2" for="password">
             Contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" value="<?php if($user) echo "{$user['password']}";?>" >
+          <input onkeyup="checkPasswordStrength()" class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" value="" >
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label class="block text-gray-400 mb-2" for="confirm_password">
             Repetir contraseña
           </label>
-          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password" value="<?php if($user) echo "{$user['password']}";?>">
+          <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password" value="">
         </div>
+        <p id="StrengthDisp" class="hidden px-3 text-xs text-gray-400 mt-2">Seguridad de la contraseña: <span id="StrengthDispValue">Weak</span></p>
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
       <div>
@@ -170,11 +186,31 @@ if(isset($_POST) && !empty($_POST))
     }
     return true;
   }
-
+  var weakPassword = true;
+  function checkPasswordStrength() {
+    let password = document.getElementById("password").value;
+    let strengthBadge = document.getElementById('StrengthDispValue');
+    document.getElementById('StrengthDisp').style.display = 'block';
+    let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+    let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
+    if(strongPassword.test(password)) {
+      strengthBadge.style.color = "green";
+      strengthBadge.textContent = 'Alta';
+      weakPassword = false;
+    } else if(mediumPassword.test(password)) {
+      strengthBadge.style.color = 'yellow';
+      strengthBadge.textContent = 'Media';
+      weakPassword = false;
+    } else {
+      strengthBadge.style.color = 'red';
+      strengthBadge.textContent = 'Baja';
+      weakPassword = true;
+    }
+  }
   function validatePassword() {
     let password = document.getElementById("password").value;
     let confirmation = document.getElementById("confirm_password").value;
-    if (password == '' || password !== confirmation) {
+    if (password !== confirmation) {
       document.getElementById("password_error").classList.add('block');
       document.getElementById("password_error").classList.remove('hidden');
       return false;

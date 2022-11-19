@@ -6,7 +6,25 @@ session_start();
 if(isset($_SESSION['user'])){
     header("Location: /views/armario.php");
 }
-
+//Get client ip
+function get_client_ip() {
+    $ipaddress = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+        $ipaddress = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
+}
 // Submit login form
 if(isset($_POST['submit']))
 {   
@@ -27,13 +45,31 @@ if(isset($_POST['submit']))
 
 
     $pw = $_POST['password'];
-    if($pw == $user['password'])
+    $equalPassword = password_verify($pw, $user['password']);
+    if($equalPassword)
     {    
         session_start();
         $_SESSION['user'] = $user['id'];
-        header("Location: /views/armario.php");
+        $lastUpdate = $user['password_update'];
+        $dateNow = date("Y-m-d H:i:s");
+        $dateDifference = abs(strtotime($dateNow) - strtotime($lastUpdate));
+        $years  = floor($dateDifference / (365 * 60 * 60 * 24));
+        $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+        if($years >=1 or $months>=1){
+            header("Location: /views/reset-password.php");
+        }else{
+            header("Location: /views/armario.php");
+        }
     } else {
         // Set error
+        $date = date("Y-m-d H:i:s");
+        $ip = get_client_ip();
+        $error = "$ip $username [$date] $pw";
+        // ini_set('display_errors', 1);
+        // error_reporting(E_ERROR | E_WARNING | E_PARSE);
+        // error_reporting(E_ALL & ~E_NOTICE);
+        // ini_set('error_log', 'php_error.log');
+        error_log($error,0); 
         $_SESSION["Login.Error"] = "Nombre de usuario o contraseña incorrectos";
     }
 }
