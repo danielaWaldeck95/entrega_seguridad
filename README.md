@@ -22,6 +22,5 @@ Para frenar el container
 $ docker-compose stop
 ```
 ## Usuarios precargados
-Hemos dejado dos usuarios precargados
-1. Usuario: daniwal  contraseña: 12345678
-2. Usuario: peli     contraseña: 12345678
+Hemos dejado un usuario precargado
+1. Usuario: daniwal  contraseña: Sgssi12345678-
