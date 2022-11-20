@@ -4,16 +4,18 @@ include '../config.php';
 if(isset($_POST) && !empty($_POST))
 {    
   $stmt = mysqli_stmt_init($conn);
-  mysqli_stmt_prepare($stmt, "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name) VALUES (?, ?, ?, ? ,?, ?, ?)");
-  mysqli_stmt_bind_param($stmt, "sssisss", $full_name, $dni, $birth_date, $phone, $email, $password, $user_name);
+  mysqli_stmt_prepare($stmt, "INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name,password_update) VALUES (?, ?, ?, ? ,?, ?, ?, ?)");
+  mysqli_stmt_bind_param($stmt, "sssissss", $full_name, $dni, $birth_date, $phone, $email, $password, $user_name,$password_update);
  
   $full_name = $_POST['full_name'];
   $user_name = $_POST['user_name'];
   $email = $_POST['email'];
   $phone = $_POST['phone'];
   $birth_date = $_POST['birth_date'];
-  $password = $_POST['password'];
+  $pw = $_POST['password'];
+  $password = password_hash($pw, PASSWORD_BCRYPT);
   $dni = $_POST['dni'];
+  $password_update = date("Y-m-d H:i:s");
 
   $result = mysqli_stmt_execute($stmt);
 
