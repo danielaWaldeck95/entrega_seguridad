@@ -85,7 +85,7 @@
                     <label for="repeat-password" class="text-lg font-medium">Repetir Contraseña</label>
                     <input type="password" name="repeat-password" id="repeat-password" placeholder="Vuelva a escribir su contraseña" class="rounded-lg w-full mt-2 p-2.5 bg-gray-700 text-sm appearance-none focus:outline-none focus:shadow-outline" required="">
                 </div>
-                <div>
+                <div class="flex flex-col">
                     <p id="StrengthDisp" class="hidden px-3 text-xs text-gray-400 mt-2">Seguridad de la contraseña: <span id="StrengthDispValue">Weak</span></p>
                     <p id="password_error" class="px-3 text-rose-600 text-xs"><?php if($_SESSION["Different-Password.Error"]) echo "{$_SESSION['Different-Password.Error']}"?></p>
                 </div>

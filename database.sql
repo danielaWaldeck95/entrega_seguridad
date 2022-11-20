@@ -76,7 +76,8 @@ CREATE TABLE products (
 --
 
 INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name, password_update) VALUES
-('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '$2y$10$i/FH7Gt6UzdaDLIOmjnj4uFOfsVb2aObpfRQx.qS.LpSD5wQvgj/G', 'daniwal', "2022-10-19 12:12:12"),
+('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '$2y$10$i/FH7Gt6UzdaDLIOmjnj4uFOfsVb2aObpfRQx.qS.LpSD5wQvgj/G', 'daniwal', "2022-10-19 12:12:12");
+
 --
 -- Volcado de datos para la tabla `categories`
 --
@@ -94,5 +95,4 @@ INSERT INTO categories (name) VALUES
 INSERT INTO products (user_id, name, brand, size, color, category_id) VALUES
 (1, 'pantalon negro', 'ZARA', 'm', 'negro', 4),
 (1, 'zapatos negros', 'vans', '38', 'negro', 1),
-(1, 'camiseta blanca', 'hym', 'm', 'blanco', 2),
-(2, 'hoodie', 'hym', 'xl', 'gris', 3);
+(1, 'camiseta blanca', 'hym', 'm', 'blanco', 2);

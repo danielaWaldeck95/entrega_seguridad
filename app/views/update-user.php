@@ -137,7 +137,7 @@ if(isset($_POST) && !empty($_POST))
             Repetir contraseña
           </label>
           <input class="bg-gray-700 text-sm appearance-none rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" id="confirm_password" type="password" value="">
-        </div>
+        </div class="flex flex-col">
         <p id="StrengthDisp" class="hidden px-3 text-xs text-gray-400 mt-2">Seguridad de la contraseña: <span id="StrengthDispValue">Weak</span></p>
         <p id="password_error" class="hidden px-3 text-rose-600 text-xs">Las contraseñas no coinciden</p>
       </div>
