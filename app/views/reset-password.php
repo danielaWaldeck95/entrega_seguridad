@@ -90,15 +90,16 @@
                     <p id="password_error" class="px-3 text-rose-600 text-xs"><?php if($_SESSION["Different-Password.Error"]) echo "{$_SESSION['Different-Password.Error']}"?></p>
                 </div>
                 <br>
-                <input type="submit" name="submit" value="Guardar" class="cursor-pointer bg-rose-600 px-3 py-2 rounded my-4"/>
+                <input type="submit" onclick="resetPassword()"name="submit" value="Guardar" class="cursor-pointer bg-rose-600 px-3 py-2 rounded my-4"/>
             </form>
         </div>
     </div>
 </body>
 <script>
+    
     var weakPassword = true;
     function checkPasswordStrength() {
-        let password = document.getElementById("password").value;
+        let password = document.getElementById("newPassword").value;
         let strengthBadge = document.getElementById('StrengthDispValue');
         document.getElementById('StrengthDisp').style.display = 'block';
         let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
@@ -115,6 +116,19 @@
         strengthBadge.style.color = 'red';
         strengthBadge.textContent = 'Baja';
         weakPassword = true;
+        }
+    }
+    function resetPassword(){
+        let passwordError = document.getElementById("password_error");
+        if (weakPassword) {
+            passwordError.classList.add('block');
+            passwordError.classList.remove('hidden');
+            passwordError.textContent = 'La contraseña es demasiado insegura. Asegúrate de que el largo de la misma sea mayor a 8 y que incluya una minúscula, una mayúscula, un dígito y un caracter especial'
+            return false;
+        }else{
+            passwordError.classList.add('hidden');
+            passwordError.classList.remove('block');
+            return true;
         }
     }
 </script>

@@ -76,9 +76,7 @@ CREATE TABLE products (
 --
 
 INSERT INTO users (full_name, dni, birth_date, phone, email, password, user_name, password_update) VALUES
-('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '12345678', 'daniwal', now()),
-('Pedro Inciarte', '16760377-R', '2001-06-20', 999999999, 'pedro.iniciarte13@gmail.com', '12345678', 'peli',now());
-
+('Daniela Waldeck', '18541555-J', '1995-07-15', 999999999, 'danielawaldeck95@gmail.com', '$2y$10$i/FH7Gt6UzdaDLIOmjnj4uFOfsVb2aObpfRQx.qS.LpSD5wQvgj/G', 'daniwal', "2022-10-19 12:12:12"),
 --
 -- Volcado de datos para la tabla `categories`
 --

@@ -210,6 +210,13 @@ if(isset($_POST) && !empty($_POST))
   function validatePassword() {
     let password = document.getElementById("password").value;
     let confirmation = document.getElementById("confirm_password").value;
+    let passwordError = document.getElementById("password_error");
+    if (weakPassword) {
+      passwordError.classList.add('block');
+      passwordError.classList.remove('hidden');
+      passwordError.textContent = 'La contraseña es demasiado insegura. Asegúrate de que el largo de la misma sea mayor a 8 y que incluya una minúscula, una mayúscula, un dígito y un caracter especial'
+      return false;
+    }
     if (password !== confirmation) {
       document.getElementById("password_error").classList.add('block');
       document.getElementById("password_error").classList.remove('hidden');
